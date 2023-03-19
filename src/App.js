@@ -1,29 +1,37 @@
+import { useState } from "react";
 import "./App.css";
 
-function ProductCategoryRow({ category }) {
+// 1.
+function FilterableProductTable({ products }) {
+	const [filterText, setFilterText] = useState("");
+	const [inStockOnly, setInStockOnly] = useState(false);
+
 	return (
-		<tr>
-			<th colSpan="2">{category}</th>
-		</tr>
+		<div>
+			<SearchBar filterText={filterText} inStockOnly={inStockOnly} />
+			<ProductTable
+				products={products}
+				filterText={filterText}
+				inStockOnly={inStockOnly}
+			/>
+		</div>
 	);
 }
 
-function ProductRow({ product }) {
-	const name = product.stocked ? (
-		product.name
-	) : (
-		<span style={{ color: "red" }}>{product.name}</span>
-	);
-
+// 2.
+function SearchBar({ filterText, inStockOnly }) {
 	return (
-		<tr>
-			<td>{name}</td>
-			<td>{product.price}</td>
-		</tr>
+		<form>
+			<input type="text" value={filterText} placeholder="Search..." />
+			<label>
+				<input type="checkbox" /> Only show products in stock
+			</label>
+		</form>
 	);
 }
 
-function ProductTable({ products }) {
+// 3.
+function ProductTable({ products, filterText, inStockOnly }) {
 	const rows = [];
 	let lastCategory = null;
 
@@ -53,23 +61,28 @@ function ProductTable({ products }) {
 	);
 }
 
-function SearchBar() {
+// 4.
+function ProductCategoryRow({ category }) {
 	return (
-		<form>
-			<input type="text" placeholder="Search..." />
-			<label>
-				<input type="checkbox" /> Only show products in stock
-			</label>
-		</form>
+		<tr>
+			<th colSpan="2">{category}</th>
+		</tr>
 	);
 }
 
-function FilterableProductTable({ products }) {
+// 5.
+function ProductRow({ product }) {
+	const name = product.stocked ? (
+		product.name
+	) : (
+		<span style={{ color: "red" }}>{product.name}</span>
+	);
+
 	return (
-		<div>
-			<SearchBar />
-			<ProductTable products={products} />
-		</div>
+		<tr>
+			<td>{name}</td>
+			<td>{product.price}</td>
+		</tr>
 	);
 }
 
